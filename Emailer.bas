@@ -8,7 +8,7 @@ Public Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As LongPtr
 
 Sub Emailer()
     'Disable ScreenUpdating for the duration of the script to
-	'mildly increase speed and prevent screen flicker
+	'prevent screen flicker (also mildly increases speed)
 	Application.ScreenUpdating = False
 	
 	'Start timer
@@ -25,16 +25,12 @@ Sub Emailer()
     
 	'Store email text in variable, using vbNewLine for Enter
     Dim body_text As String
-    'body_text = "Hello," & vbNewLine & vbNewLine & _
-    '"Please find attached the tremendous report entitled 'Big Report - Grand rapport.pdf'." & vbNewLine & vbNewLine & _
-    '"Sincerely," & vbNewLine & vbNewLine & _
-    '"Sam Louden" & vbNewLine
-    
-	body_text = "<p>Hello</p>" & _
-	"<img src=""github-logo.png"" width=""40px"" />"
-	
-	
-	
+    body_text = "Hello," & vbNewLine & vbNewLine & _
+    "Please find attached the tremendous report entitled 'Big Report - Grand rapport.pdf'." & vbNewLine & vbNewLine & _
+    "Note the code from today's presentation can be found at:" & vbNewLine & vbNewLine & _
+	"https://github.com/deepklim/Data-Analytics-in-Financial-Management-GC" & vbNewLine & vbNewLine & _
+	"Sincerely," & vbNewLine & vbNewLine & _
+    "Sam Louden" & vbNewLine
 	
 	'Loop through each email address in column A and send it the message + attachment
     Dim i As Long
@@ -45,13 +41,12 @@ Sub Emailer()
             .To = WS.Range("A" & i).Value2
             .Subject = "Report"
             '1 for olFormatPlain
-            '.BodyFormat = 1
-            '.Body = body_text
-			.HTMLbody = body_text
+            .BodyFormat = 1
+            .Body = body_text
 			'Add attachment; stored in same folder as this program
             .Attachments.Add ThisWorkbook.Path & "\" & "Big Report - Grand rapport.pdf"
             '.Send to send immediately; .Save to save to Drafts
-            .Save
+            .Send
         End With
 		'Pause for 100 miliseconds after sending each email
         Sleep (100)
